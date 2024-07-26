@@ -31,13 +31,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'django.contrib.admin', #COMENTAR EN CASO DE QUE SE QUIERA MIGRAR NUEVAMENTE LA APLICACION
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
+    'accounts.apps.AccountsConfig', 
 ]
 
 MIDDLEWARE = [
@@ -48,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'blog.middleware.auth.AuthMiddleware',
 ]
 
 ROOT_URLCONF = 'loginApp.urls'
@@ -78,12 +80,15 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'login_app',
-        'USER': 'sample_user',
-        'PASSWORD': 'password',
+        'USER': 'nicole',           # El usuario que acabas de crear
+        'PASSWORD': 'admin',        # La contraseña que has definido
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
+
+
+
 
 
 # Password validation
@@ -108,9 +113,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
-LANGUAGE_CODE = 'ja'
+LANGUAGE_CODE = 'es'
 
-TIME_ZONE = 'Asia/Tokyo'
+TIME_ZONE = 'America/Asuncion'
 
 USE_I18N = True
 
@@ -127,3 +132,13 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Destino de redirección después del inicio de sesión
+LOGIN_URL = '/accounts/login'
+LOGIN_REDIRECT_URL = '/blog'
+LOGOUT_REDIRECT_URL = '/accounts/login'
+
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
+

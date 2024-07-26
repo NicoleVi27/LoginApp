@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from .models import Article
 from .forms import ArticleForm
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -11,9 +12,16 @@ def index(request):
     }
     return render(request, 'blog/index.html', params)
 
+def detail(request, article_id):
+    article = Article.objects.get(id=article_id)
+    params = {
+        'article': article,
+    }
+    return render(request, 'blog/detail.html', params)
 
+@login_required
 def create(request):
-    if (request.method == 'POST'):
+    if request.method == 'POST':
         title = request.POST['title']
         content = request.POST['content']
         article = Article(title=title, content=content)
@@ -25,18 +33,10 @@ def create(request):
         }
         return render(request, 'blog/create.html', params)
 
-
-def detail(request, article_id):
-    article = Article.objects.get(id=article_id)
-    params = {
-        'article': article,
-    }
-    return render(request, 'blog/detail.html', params)
-
-
+@login_required
 def edit(request, article_id):
     article = Article.objects.get(id=article_id)
-    if (request.method == 'POST'):
+    if request.method == 'POST':
         article.title = request.POST['title']
         article.content = request.POST['content']
         article.save()
@@ -52,10 +52,10 @@ def edit(request, article_id):
         }
         return render(request, 'blog/edit.html', params)
 
-
+@login_required
 def delete(request, article_id):
     article = Article.objects.get(id=article_id)
-    if (request.method == 'POST'):
+    if request.method == 'POST':
         article.delete()
         return redirect('blog:index')
     else:
@@ -63,3 +63,4 @@ def delete(request, article_id):
             'article': article,
         }
         return render(request, 'blog/delete.html', params)
+

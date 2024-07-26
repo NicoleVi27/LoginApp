@@ -1,26 +1,65 @@
-{% load static %}
-
-<html>
-
-  <head>
-    <meta charset="utf-8">
-    <title>Blog</title>
-    <link rel="stylesheet" href="{% static 'blog/css/normalize.css' %}">
-    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
-  </head>
-
-  <body>
-    <nav>
-      <ul>
-        <li><a href="{% url 'blog:index' %}">ブログ一覧</a></li>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Configuración de la codificación de caracteres y vista adaptable -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Título del sitio web, puede ser reemplazado por bloques específicos -->
+  <title>{% block title %}Mi Aplicación{% endblock %}</title>
+  <!-- Cargar etiquetas estáticas -->
+  {% load static %}
+  <!-- Inclusión de la hoja de estilos de Bootstrap para un diseño responsivo -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Inclusión de la hoja de estilos personalizada -->
+  <link rel="stylesheet" href="{% static 'blog/css/normalize.css' %}">
+  <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+  <!-- Bloque para agregar elementos adicionales en el encabezado si es necesario -->
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <!-- Navegación principal del sitio web -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Marca del sitio web -->
+    <a class="navbar-brand" href="#">Mi Aplicación</a>
+    <div class="collapse navbar-collapse">
+      <!-- Lista de enlaces de navegación -->
+      <ul class="navbar-nav mr-auto">
+        <!-- Comprobación si el usuario está autenticado -->
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <!-- Enlace a la lista de blogs -->
+          <a class="nav-link" href="{% url 'blog:index' %}">Lista de Blogs</a>
+        </li>
+        <li class="nav-item">
+          <!-- Enlace para cerrar sesión -->
+          <a class="nav-link" href="{% url 'logout' %}">Cerrar Sesión</a>
+        </li>
+        <li class="nav-item">
+          <!-- Enlace a la información del usuario -->
+          <a class="nav-link" href="{% url 'user_detail' user.pk %}">Información del Usuario</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <!-- Enlace para iniciar sesión -->
+          <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a>
+        </li>
+        <li class="nav-item">
+          <!-- Enlace para registrarse -->
+          <a class="nav-link" href="{% url 'signup' %}">Registrarse</a>
+        </li>
+        {% endif %}
       </ul>
-    </nav>
-    <main>
-      <div>
-        {% block main %}
-        {% endblock %}
-      </div>
-    </main>
-  </body>
-
+    </div>
+  </nav>
+  <!-- Contenedor principal del contenido de la página -->
+  <main class="container">
+    <!-- Bloque principal donde se insertará el contenido específico de cada página -->
+    {% block main %}
+    {% endblock %}
+  </main>
+  <!-- Inclusión de scripts de Bootstrap y jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
 </html>
